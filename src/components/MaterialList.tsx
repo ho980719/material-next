@@ -22,7 +22,14 @@ export default function MaterialList({ initialItems, zones }: { initialItems: Ma
   const zoneById = useMemo(() => new Map(zones.map((z) => [z.id, z])), [zones]);
 
   const search = async (term: string) => {
-    const res = await fetch(`/api/materials?q=${encodeURIComponent(term)}&limit=50`);
+    const params = new URLSearchParams({ q: term });
+    // push q to the URL so server-side pagination uses it
+    const url = new URL(window.location.href);
+    url.searchParams.set("q", term);
+    url.searchParams.set("page", "1");
+    window.history.replaceState({}, "", url.toString());
+
+    const res = await fetch(`/api/materials?${params.toString()}&limit=50`);
     if (res.ok) {
       const data = await res.json();
       setItems(data);
