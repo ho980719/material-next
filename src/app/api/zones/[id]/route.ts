@@ -16,8 +16,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       },
     });
     return NextResponse.json(updated);
-  } catch (e: any) {
-    if (e?.code === "P2002") {
+  } catch (error) {
+    const e = error as { code?: string } | unknown;
+    if (typeof e === "object" && e && (e as { code?: string }).code === "P2002") {
       return NextResponse.json({ error: "Zone name must be unique" }, { status: 409 });
     }
     return NextResponse.json({ error: "Failed to update zone" }, { status: 500 });

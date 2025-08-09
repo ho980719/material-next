@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       data: { name, quantity, zoneId },
     });
     return NextResponse.json(created, { status: 201 });
-  } catch (e: any) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to create material" }, { status: 500 });
   }
 }

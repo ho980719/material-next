@@ -31,8 +31,9 @@ export default function MaterialCreateForm({ zones }: { zones: Zone[] }) {
       setQuantity(1);
       setZoneId(zones[0]?.id ?? 0);
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "오류가 발생했습니다";
+      setError(message);
     } finally {
       setLoading(false);
     }

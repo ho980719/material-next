@@ -27,9 +27,10 @@ export default function ZoneEditLauncher({ zone }: { zone: Zone }) {
       setShow(false);
       pushToast("저장되었습니다", "success");
       router.refresh();
-    } catch (e: any) {
-      setError(e.message);
-      pushToast(e.message || "오류가 발생했습니다", "danger");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "오류가 발생했습니다";
+      setError(message);
+      pushToast(message, "danger");
     } finally {
       setLoading(false);
     }
