@@ -15,20 +15,18 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
   const [q, setQ] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<number | null>(null);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => setItems(initialItems), [initialItems]);
 
   const zoneById = useMemo(() => new Map(zones.map((z) => [z.id, z])), [zones]);
 
-  const search = async (term: string) => {
-    // 서버 사이드 쿼리로 일원화: URL만 변경하여 페이지 전체를 최신 q 기준으로 리렌더
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const search = (term: string) => {
     const url = new URL(window.location.href);
     url.searchParams.set("q", term);
     url.searchParams.set("page", "1");
-    // 히스토리 누적 피하고 즉시 서버 리프레시
-    window.history.replaceState({}, "", url.toString());
-    router.refresh();
+    // 히스토리 누적 없이 soft navigation으로 SSR 재요청
+    router.replace(`${url.pathname}?${url.searchParams.toString()}`);
   };
 
   // updateRow: 현재는 직접 호출하지 않음. 필요 시 행 인라인 수정 기능에 재사용 가능.
@@ -51,24 +49,26 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
         <div className="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
           <h5 className="card-title m-0">자재 목록</h5>
           <div className="d-flex gap-2">
-            <input
-              className="form-control"
-              style={{ width: 240 }}
-              placeholder="검색(자재명/zone명)"
-              value={q}
-              onChange={(e) => {
-                const v = e.target.value;
-                setQ(v);
-                if (debounceRef.current) clearTimeout(debounceRef.current);
-                debounceRef.current = setTimeout(() => search(v), 300);
+            <form
+              className="d-flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const term = inputRef.current?.value?.trim() ?? "";
+                search(term);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") search(q);
-              }}
-            />
-            <button className="btn btn-outline-primary" onClick={() => search(q)}>
-              <i className="bi bi-search" /> 검색
-            </button>
+            >
+              <input
+                ref={inputRef}
+                className="form-control"
+                style={{ width: 240 }}
+                placeholder="검색(자재명/zone명)"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+              <button type="submit" className="btn btn-outline-primary">
+                <i className="bi bi-search" /> 검색
+              </button>
+            </form>
           </div>
         </div>
         {error && <div className="alert alert-danger py-2">{error}</div>}

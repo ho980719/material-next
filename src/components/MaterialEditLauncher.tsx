@@ -76,7 +76,7 @@ export default function MaterialEditLauncher({
                   />
                 </div>
                 <div className="col-6">
-                  <label className="form-label">Zone</label>
+                  <label className="form-label">창고</label>
                   <select className="form-select" value={zoneId} onChange={(e) => setZoneId(Number(e.target.value))}>
                     {zones.map((z) => (
                       <option key={z.id} value={z.id}>

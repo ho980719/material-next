@@ -7,6 +7,8 @@ import ClientBootstrap from "@/components/ClientBootstrap";
 import Sidebar from "@/components/Sidebar";
 import ToastArea from "@/components/ToastArea";
 import MobileNavbar from "@/components/MobileNavbar";
+import GlobalLoading from "@/components/GlobalLoading";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +35,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ClientBootstrap />
         <MobileNavbar />
+        <Suspense fallback={null}>
+          <GlobalLoading />
+        </Suspense>
         <div className="d-flex" style={{ minHeight: "100vh" }}>
           <Sidebar />
           <main className="flex-grow-1">

@@ -17,7 +17,6 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState("");
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // URL의 q를 초기값으로 반영
@@ -27,12 +26,12 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
     } catch {}
   }, []);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const applySearch = (term: string) => {
     const url = new URL(window.location.href);
     url.searchParams.set("q", term);
     url.searchParams.set("page", "1");
-    window.history.replaceState({}, "", url.toString());
-    router.refresh();
+    router.replace(`${url.pathname}?${url.searchParams.toString()}`);
   };
   const [confirmId, setConfirmId] = useState<number | null>(null);
 
@@ -54,33 +53,26 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
         <div className="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
           <h5 className="card-title m-0">창고 목록</h5>
           <div className="d-flex gap-2">
-            <input
-              className="form-control"
-              style={{ width: 240 }}
-              placeholder="창고 이름 검색"
-              value={q}
-              onChange={(e) => {
-                const v = e.target.value;
-                setQ(v);
-                if (debounceRef.current) clearTimeout(debounceRef.current);
-                debounceRef.current = setTimeout(() => applySearch(v), 300);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (debounceRef.current) clearTimeout(debounceRef.current);
-                  applySearch(q);
-                }
-              }}
-            />
-            <button
-              className="btn btn-outline-primary"
-              onClick={() => {
-                if (debounceRef.current) clearTimeout(debounceRef.current);
-                applySearch(q);
+            <form
+              className="d-flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const term = inputRef.current?.value?.trim() ?? "";
+                applySearch(term);
               }}
             >
-              <i className="bi bi-search" /> 검색
-            </button>
+              <input
+                ref={inputRef}
+                className="form-control"
+                style={{ width: 240 }}
+                placeholder="창고 이름 검색"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+              <button type="submit" className="btn btn-outline-primary">
+                <i className="bi bi-search" /> 검색
+              </button>
+            </form>
           </div>
         </div>
         {error && <div className="alert alert-danger py-2">{error}</div>}
@@ -109,7 +101,12 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
                     <tr key={z.id}>
                       <td className="text-secondary text-center d-none d-sm-table-cell">{rowNumber}</td>
                       <td hidden>{z.id}</td>
-                      <td>{z.name}</td>
+                      <td>
+                        <span>{z.name}</span>
+                        <span className="badge text-bg-secondary ms-2" title={`자재 ${z._count.materials}개`}>
+                          {z._count.materials}
+                        </span>
+                      </td>
                       <td className="d-none d-md-table-cell">{z.memo ?? "-"}</td>
                       <td className="text-center">
                         <div className="btn-group btn-group-sm">
@@ -118,7 +115,7 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
                             className="btn btn-outline-danger"
                             onClick={() => setConfirmId(z.id)}
                             disabled={z._count.materials > 0}
-                            title={z._count.materials > 0 ? "자재가 있는 창고는 삭제 불가" : undefined}
+                            title={z._count.materials > 0 ? `자재 ${z._count.materials}개가 있어 삭제 불가` : undefined}
                           >
                             <i className="bi bi-trash" />
                           </button>

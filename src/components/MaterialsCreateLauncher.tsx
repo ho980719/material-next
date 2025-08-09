@@ -46,7 +46,7 @@ export default function MaterialsCreateLauncher({ zones }: { zones: Zone[] }) {
         자재 등록
       </button>
       <div className={`modal fade ${show ? "show d-block" : ""}`} tabIndex={-1} role="dialog">
-        <div className="modal-dialog" role="document">
+        <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">자재 등록</h5>
@@ -70,7 +70,7 @@ export default function MaterialsCreateLauncher({ zones }: { zones: Zone[] }) {
                   />
                 </div>
                 <div className="col-6">
-                  <label className="form-label">Zone</label>
+                  <label className="form-label">창고</label>
                   <select className="form-select" value={zoneId} onChange={(e) => setZoneId(Number(e.target.value))}>
                     {zones.map((z) => (
                       <option key={z.id} value={z.id}>

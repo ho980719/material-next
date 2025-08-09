@@ -103,3 +103,19 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Top progress bar */
+.top-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2000;
+  pointer-events: none;
+}
+.top-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0d6efd, #6ea8fe);
+  transition: width 200ms ease;
+}

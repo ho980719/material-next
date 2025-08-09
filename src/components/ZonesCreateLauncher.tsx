@@ -42,7 +42,7 @@ export default function ZonesCreateLauncher() {
         창고 등록
       </button>
       <div className={`modal fade ${show ? "show d-block" : ""}`} tabIndex={-1} role="dialog">
-        <div className="modal-dialog" role="document">
+        <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">창고 등록</h5>
