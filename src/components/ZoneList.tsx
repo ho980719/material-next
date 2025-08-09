@@ -88,18 +88,17 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
           <table className="table table-hover align-middle table-sticky">
             <thead>
               <tr>
-                <th className="text-secondary text-center" style={{ width: "10%" }}>#</th>
-                <th className="text-center" style={{ width: "1%" }} hidden>ID</th>
-                <th className="text-center" style={{ width: "20%" }}>이름</th>
-                <th className="text-center" style={{ width: "80px" }}>자재수</th>
-                <th className="text-center">메모</th>
-                <th className="text-center" style={{ width: "20%" }}>Actions</th>
+                <th className="text-secondary text-center d-none d-sm-table-cell" style={{ width: "10%" }}>#</th>
+                <th className="text-center" hidden>ID</th>
+                <th className="text-center">이름</th>
+                <th className="text-center d-none d-md-table-cell">메모</th>
+                <th className="text-center" style={{ width: "120px" }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {zones.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center text-secondary py-5">
+                  <td colSpan={4} className="text-center text-secondary py-5">
                     데이터가 없습니다.
                   </td>
                 </tr>
@@ -108,21 +107,20 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
                   const rowNumber = total - ((page - 1) * pageSize) - idx;
                   return (
                     <tr key={z.id}>
-                      <td className="text-secondary text-center">{rowNumber}</td>
+                      <td className="text-secondary text-center d-none d-sm-table-cell">{rowNumber}</td>
                       <td hidden>{z.id}</td>
                       <td>{z.name}</td>
-                      <td className="text-end">{z._count.materials}</td>
-                      <td>{z.memo ?? "-"}</td>
+                      <td className="d-none d-md-table-cell">{z.memo ?? "-"}</td>
                       <td className="text-center">
                         <div className="btn-group btn-group-sm">
-                          <ZoneEditLauncher zone={z} />
+                          <ZoneEditLauncher zone={z} iconOnly={true} />
                           <button
                             className="btn btn-outline-danger"
                             onClick={() => setConfirmId(z.id)}
                             disabled={z._count.materials > 0}
                             title={z._count.materials > 0 ? "자재가 있는 창고는 삭제 불가" : undefined}
                           >
-                            삭제
+                            <i className="bi bi-trash" />
                           </button>
                         </div>
                       </td>

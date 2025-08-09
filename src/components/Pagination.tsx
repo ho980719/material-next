@@ -14,7 +14,7 @@ export default function Pagination({ page, pageSize, total }: Props) {
   const searchParams = useSearchParams();
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const blockSize = 10; // 한 블록에 보여줄 페이지 수
+  const blockSize = 5; // 모바일 고려 기본 5개
   const currentBlock = Math.floor((page - 1) / blockSize);
   const blockStart = currentBlock * blockSize + 1;
   const blockEnd = Math.min(blockStart + blockSize - 1, totalPages);
@@ -37,7 +37,7 @@ export default function Pagination({ page, pageSize, total }: Props) {
 
   return (
     <nav aria-label="Pagination">
-      <ul className="pagination pagination-sm pagination-modern mb-0 gap-1">
+      <ul className="pagination pagination-sm pagination-modern mb-0 gap-1 flex-wrap justify-content-center">
         <li className={`page-item ${page <= 1 ? "disabled" : ""}`}>
           <button className="page-link" aria-label="First" onClick={() => go(1)}>
             <i className="bi bi-chevron-double-left" />

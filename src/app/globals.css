@@ -25,6 +25,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Mobile typography scale */
+@media (max-width: 576px) {
+  body {
+    font-size: 13px;
+  }
+  .table {
+    font-size: 13px;
+  }
+  .btn, .form-control, .form-select, .page-link {
+    font-size: 13px;
+  }
+}
+
 .card {
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.06);

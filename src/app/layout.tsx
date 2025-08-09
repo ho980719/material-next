@@ -6,6 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import ClientBootstrap from "@/components/ClientBootstrap";
 import Sidebar from "@/components/Sidebar";
 import ToastArea from "@/components/ToastArea";
+import MobileNavbar from "@/components/MobileNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +32,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ClientBootstrap />
+        <MobileNavbar />
         <div className="d-flex" style={{ minHeight: "100vh" }}>
           <Sidebar />
           <main className="flex-grow-1">
-            <div className="container py-3">{children}</div>
+            <div className="container py-3 py-md-3 px-3 px-md-3">{children}</div>
           </main>
         </div>
         <ToastArea />

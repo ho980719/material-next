@@ -6,7 +6,7 @@ import { pushToast } from "@/components/ToastArea";
 
 type Zone = { id: number; name: string; memo: string | null };
 
-export default function ZoneEditLauncher({ zone }: { zone: Zone }) {
+export default function ZoneEditLauncher({ zone, iconOnly = false }: { zone: Zone; iconOnly?: boolean }) {
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [name, setName] = useState(zone.name);
@@ -38,8 +38,8 @@ export default function ZoneEditLauncher({ zone }: { zone: Zone }) {
 
   return (
     <>
-      <button className="btn btn-outline-primary btn-sm" onClick={() => setShow(true)}>
-        수정
+      <button className="btn btn-outline-primary btn-sm" onClick={() => setShow(true)} aria-label="수정">
+        {iconOnly ? <i className="bi bi-pencil" /> : "수정"}
       </button>
       <div className={`modal fade ${show ? "show d-block" : ""}`} tabIndex={-1} role="dialog">
         <div className="modal-dialog" role="document">

@@ -7,7 +7,15 @@ import { pushToast } from "@/components/ToastArea";
 type Zone = { id: number; name: string };
 type Material = { id: number; name: string; quantity: number; zoneId: number };
 
-export default function MaterialEditLauncher({ material, zones }: { material: Material; zones: Zone[] }) {
+export default function MaterialEditLauncher({
+  material,
+  zones,
+  iconOnly = false,
+}: {
+  material: Material;
+  zones: Zone[];
+  iconOnly?: boolean;
+}) {
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [name, setName] = useState<string>(material.name);
@@ -40,8 +48,8 @@ export default function MaterialEditLauncher({ material, zones }: { material: Ma
 
   return (
     <>
-      <button className="btn btn-outline-primary btn-sm" onClick={() => setShow(true)}>
-        수정
+      <button className="btn btn-outline-primary btn-sm" onClick={() => setShow(true)} aria-label="수정">
+        {iconOnly ? <i className="bi bi-pencil" /> : "수정"}
       </button>
       <div className={`modal fade ${show ? "show d-block" : ""}`} tabIndex={-1} role="dialog">
         <div className="modal-dialog modal-dialog-centered" role="document">

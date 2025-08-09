@@ -76,18 +76,17 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
           <table className="table table-hover align-middle table-sticky">
             <thead>
               <tr>
-                <th style={{ width: "10%" }} className="text-secondary text-center">#</th>
+                <th style={{ width: "10%" }} className="text-secondary text-center d-none d-sm-table-cell">#</th>
                 <th style={{ width: "1%" }} className="text-center" hidden>ID</th>
                 <th className="text-center">이름</th>
                 <th style={{ width: "30%" }} className="text-center">창고</th>
-                <th style={{ width: "50px" }} className="text-center">수량</th>
-                <th style={{ width: "20%" }} className="text-center">Actions</th>
+                <th style={{ width: "20%" }} className="text-center d-none d-md-table-cell">Actions</th>
               </tr>
             </thead>
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center text-secondary py-5">
+                  <td colSpan={4} className="text-center text-secondary py-5">
                     데이터가 없습니다.
                   </td>
                 </tr>
@@ -96,21 +95,22 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
                   const rowNumber = total - ((page - 1) * pageSize) - idx;
                   return (
                     <tr key={m.id}>
-                      <td className="text-secondary text-center">{rowNumber}</td>
+                      <td className="text-secondary text-center d-none d-sm-table-cell">{rowNumber}</td>
                       <td hidden>{m.id}</td>
                       <td>{m.name}</td>
                       <td className="text-center">{zoneById.get(m.zoneId)?.name}</td>
-                      <td className="text-end">{m.quantity ?? 0}</td>
                       <td className="text-center">
                         <div className="btn-group btn-group-sm">
-                          <MaterialEditLauncher material={{ id: m.id, name: m.name, quantity: m.quantity ?? 0, zoneId: m.zoneId }} zones={zones} />
-                        <button
-                          className="btn btn-outline-danger btn-sm"
-                          onClick={() => setConfirmId(m.id)}
-                        >
-                          삭제
-                        </button>
-                      </div>
+                          <MaterialEditLauncher iconOnly material={{ id: m.id, name: m.name, quantity: m.quantity ?? 0, zoneId: m.zoneId }} zones={zones} />
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            title="삭제"
+                            aria-label="삭제"
+                            onClick={() => setConfirmId(m.id)}
+                          >
+                            <i className="bi bi-trash" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
