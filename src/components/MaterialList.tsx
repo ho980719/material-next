@@ -6,12 +6,12 @@ import ConfirmModal from "@/components/ConfirmModal";
 import { pushToast } from "@/components/ToastArea";
 import MaterialEditLauncher from "@/components/MaterialEditLauncher";
 
-type Zone = { id: number; name: string };
-type Material = { id: number; name: string; quantity: number; zoneId: number; zone: Zone };
+type UIZone = { id: number; name: string };
+type UIMaterial = { id: number; name: string; quantity: number | null; zoneId: number; zone: UIZone };
 
-export default function MaterialList({ initialItems, zones, page, pageSize, total }: { initialItems: Material[]; zones: Zone[]; page: number; pageSize: number; total: number }) {
+export default function MaterialList({ initialItems, zones, page, pageSize, total }: { initialItems: UIMaterial[]; zones: UIZone[]; page: number; pageSize: number; total: number }) {
   const router = useRouter();
-  const [items, setItems] = useState<Material[]>(initialItems);
+  const [items, setItems] = useState<UIMaterial[]>(initialItems);
   const [q, setQ] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<number | null>(null);
@@ -33,7 +33,7 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
 
   // updateRow: 현재는 직접 호출하지 않음. 필요 시 행 인라인 수정 기능에 재사용 가능.
 
-  const onDelete = async (m: Material) => {
+  const onDelete = async (m: UIMaterial) => {
     setError(null);
     const res = await fetch(`/api/materials/${m.id}`, { method: "DELETE" });
     if (!res.ok) {
@@ -100,10 +100,10 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
                       <td hidden>{m.id}</td>
                       <td>{m.name}</td>
                       <td className="text-center">{zoneById.get(m.zoneId)?.name}</td>
-                      <td className="text-end">{m.quantity}</td>
+                      <td className="text-end">{m.quantity ?? 0}</td>
                       <td className="text-center">
-                      <div className="btn-group btn-group-sm">
-                        <MaterialEditLauncher material={m} zones={zones} />
+                        <div className="btn-group btn-group-sm">
+                          <MaterialEditLauncher material={{ id: m.id, name: m.name, quantity: m.quantity ?? 0, zoneId: m.zoneId }} zones={zones} />
                         <button
                           className="btn btn-outline-danger btn-sm"
                           onClick={() => setConfirmId(m.id)}

@@ -10,8 +10,11 @@ export async function GET() {
   const lines: string[] = ["# Materials", ""];
   const byZone: Map<number, { zoneName: string; items: { name: string; qty: number }[] }> = new Map();
   for (const m of materials) {
-    const existing = byZone.get(m.zoneId) ?? { zoneName: m.zone.name, items: [] };
-    existing.items.push({ name: m.name, qty: m.quantity });
+    const existing = byZone.get(m.zoneId) ?? {
+      zoneName: m.zone.name,
+      items: [] as { name: string; qty: number }[],
+    };
+    existing.items.push({ name: m.name, qty: Number(m.quantity ?? 0) });
     byZone.set(m.zoneId, existing);
   }
   for (const [, group] of byZone) {
