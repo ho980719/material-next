@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import MaterialList from "@/components/MaterialList";
 import Pagination from "@/components/Pagination";
 import MaterialsCreateLauncher from "@/components/MaterialsCreateLauncher";
-import Link from "next/link";
 
 export default async function MaterialsPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {
   const pageSize = 10;

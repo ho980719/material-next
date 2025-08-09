@@ -15,7 +15,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   try {
     const updated = await prisma.material.update({ where: { id }, data });
     return NextResponse.json(updated);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to update material" }, { status: 500 });
   }
 }

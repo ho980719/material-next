@@ -31,20 +31,7 @@ export default function MaterialList({ initialItems, zones, page, pageSize, tota
     router.refresh();
   };
 
-  const updateRow = async (m: Material, updates: Partial<Pick<Material, "quantity" | "zoneId">>) => {
-    setError(null);
-    const res = await fetch(`/api/materials/${m.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updates),
-    });
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data.error || "수정 실패");
-      return;
-    }
-    router.refresh();
-  };
+  // updateRow: 현재는 직접 호출하지 않음. 필요 시 행 인라인 수정 기능에 재사용 가능.
 
   const onDelete = async (m: Material) => {
     setError(null);

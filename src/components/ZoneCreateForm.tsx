@@ -27,8 +27,9 @@ export default function ZoneCreateForm() {
       setName("");
       setMemo("");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "오류가 발생했습니다";
+      setError(message);
     } finally {
       setLoading(false);
     }
