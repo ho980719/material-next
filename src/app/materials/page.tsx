@@ -32,16 +32,13 @@ export default async function MaterialsPage({ searchParams }: { searchParams: Pr
         <h2 className="m-0">자재 목록</h2>
         <div className="d-flex gap-2">
           <MaterialsCreateLauncher zones={zones} />
-          <Link href="/materials/export" className="btn btn-outline-secondary btn-sm">
-            Markdown 다운로드
-          </Link>
         </div>
       </div>
       <div className="row g-4">
         <div className="col-12">
-          <MaterialList initialItems={materials} zones={zones} />
+          <MaterialList initialItems={materials} zones={zones} page={page} pageSize={pageSize} total={total} />
         </div>
-        <div className="col-12 d-flex justify-content-end">
+        <div className="col-12 d-flex justify-content-center">
           <Pagination page={page} pageSize={pageSize} total={total} />
         </div>
       </div>

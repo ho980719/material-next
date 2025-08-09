@@ -14,6 +14,10 @@ export default function Pagination({ page, pageSize, total }: Props) {
   const searchParams = useSearchParams();
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const blockSize = 10; // 한 블록에 보여줄 페이지 수
+  const currentBlock = Math.floor((page - 1) / blockSize);
+  const blockStart = currentBlock * blockSize + 1;
+  const blockEnd = Math.min(blockStart + blockSize - 1, totalPages);
 
   const go = (p: number) => {
     if (p < 1 || p > totalPages || p === page) return;
@@ -23,20 +27,9 @@ export default function Pagination({ page, pageSize, total }: Props) {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const buildPages = (): (number | "…")[] => {
-    const items: (number | "…")[] = [];
-    const maxButtons = 5;
-    if (totalPages <= maxButtons + 2) {
-      for (let i = 1; i <= totalPages; i++) items.push(i);
-      return items;
-    }
-    items.push(1);
-    const start = Math.max(2, page - 1);
-    const end = Math.min(totalPages - 1, page + 1);
-    if (start > 2) items.push("…");
-    for (let i = start; i <= end; i++) items.push(i);
-    if (end < totalPages - 1) items.push("…");
-    items.push(totalPages);
+  const buildPages = (): number[] => {
+    const items: number[] = [];
+    for (let i = blockStart; i <= blockEnd; i++) items.push(i);
     return items;
   };
 
@@ -50,26 +43,20 @@ export default function Pagination({ page, pageSize, total }: Props) {
             <i className="bi bi-chevron-double-left" />
           </button>
         </li>
-        <li className={`page-item ${page <= 1 ? "disabled" : ""}`}>
-          <button className="page-link" aria-label="Previous" onClick={() => go(page - 1)}>
+        <li className={`page-item ${blockStart <= 1 ? "disabled" : ""}`}>
+          <button className="page-link" aria-label="Prev block" onClick={() => go(blockStart - 1)}>
             <i className="bi bi-chevron-left" />
           </button>
         </li>
-        {items.map((it, idx) =>
-          it === "…" ? (
-            <li key={`e-${idx}`} className="page-item disabled">
-              <span className="page-link">…</span>
-            </li>
-          ) : (
-            <li key={it} className={`page-item ${it === page ? "active" : ""}`}>
-              <button className="page-link" onClick={() => go(it)}>
-                {it}
-              </button>
-            </li>
-          )
-        )}
-        <li className={`page-item ${page >= totalPages ? "disabled" : ""}`}>
-          <button className="page-link" aria-label="Next" onClick={() => go(page + 1)}>
+        {items.map((it) => (
+          <li key={it} className={`page-item ${it === page ? "active" : ""}`}>
+            <button className="page-link" onClick={() => go(it)}>
+              {it}
+            </button>
+          </li>
+        ))}
+        <li className={`page-item ${blockEnd >= totalPages ? "disabled" : ""}`}>
+          <button className="page-link" aria-label="Next block" onClick={() => go(blockEnd + 1)}>
             <i className="bi bi-chevron-right" />
           </button>
         </li>

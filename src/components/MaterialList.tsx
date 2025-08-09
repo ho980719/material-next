@@ -9,7 +9,7 @@ import MaterialEditLauncher from "@/components/MaterialEditLauncher";
 type Zone = { id: number; name: string };
 type Material = { id: number; name: string; quantity: number; zoneId: number; zone: Zone };
 
-export default function MaterialList({ initialItems, zones }: { initialItems: Material[]; zones: Zone[] }) {
+export default function MaterialList({ initialItems, zones, page, pageSize, total }: { initialItems: Material[]; zones: Zone[]; page: number; pageSize: number; total: number }) {
   const router = useRouter();
   const [items, setItems] = useState<Material[]>(initialItems);
   const [q, setQ] = useState("");
@@ -22,18 +22,13 @@ export default function MaterialList({ initialItems, zones }: { initialItems: Ma
   const zoneById = useMemo(() => new Map(zones.map((z) => [z.id, z])), [zones]);
 
   const search = async (term: string) => {
-    const params = new URLSearchParams({ q: term });
-    // push q to the URL so server-side pagination uses it
+    // 서버 사이드 쿼리로 일원화: URL만 변경하여 페이지 전체를 최신 q 기준으로 리렌더
     const url = new URL(window.location.href);
     url.searchParams.set("q", term);
     url.searchParams.set("page", "1");
+    // 히스토리 누적 피하고 즉시 서버 리프레시
     window.history.replaceState({}, "", url.toString());
-
-    const res = await fetch(`/api/materials?${params.toString()}&limit=50`);
-    if (res.ok) {
-      const data = await res.json();
-      setItems(data);
-    }
+    router.refresh();
   };
 
   const updateRow = async (m: Material, updates: Partial<Pick<Material, "quantity" | "zoneId">>) => {
@@ -94,11 +89,12 @@ export default function MaterialList({ initialItems, zones }: { initialItems: Ma
           <table className="table table-hover align-middle table-sticky">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>이름</th>
-                <th style={{ width: 140 }}>수량</th>
-                <th style={{ width: 240 }}>Zone</th>
-                <th className="text-end">Actions</th>
+                <th style={{ width: "10%" }} className="text-secondary text-center">#</th>
+                <th style={{ width: "1%" }} className="text-center" hidden>ID</th>
+                <th className="text-center">이름</th>
+                <th style={{ width: "30%" }} className="text-center">창고</th>
+                <th style={{ width: "50px" }} className="text-center">수량</th>
+                <th style={{ width: "20%" }} className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -109,13 +105,16 @@ export default function MaterialList({ initialItems, zones }: { initialItems: Ma
                   </td>
                 </tr>
               ) : (
-                items.map((m) => (
-                  <tr key={m.id}>
-                    <td>{m.id}</td>
-                    <td>{m.name}</td>
-                    <td>{m.quantity}</td>
-                    <td>{zoneById.get(m.zoneId)?.name}</td>
-                    <td className="text-end">
+                items.map((m, idx) => {
+                  const rowNumber = total - ((page - 1) * pageSize) - idx;
+                  return (
+                    <tr key={m.id}>
+                      <td className="text-secondary text-center">{rowNumber}</td>
+                      <td hidden>{m.id}</td>
+                      <td>{m.name}</td>
+                      <td className="text-center">{zoneById.get(m.zoneId)?.name}</td>
+                      <td className="text-end">{m.quantity}</td>
+                      <td className="text-center">
                       <div className="btn-group btn-group-sm">
                         <MaterialEditLauncher material={m} zones={zones} />
                         <button
@@ -125,9 +124,10 @@ export default function MaterialList({ initialItems, zones }: { initialItems: Ma
                           삭제
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

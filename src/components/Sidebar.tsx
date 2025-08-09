@@ -10,7 +10,7 @@ export default function Sidebar() {
   return (
     <aside
       className="d-none d-md-flex flex-column border-end bg-body-tertiary"
-      style={{ width: 240 }}
+      style={{ width: 200 }}
     >
       <div className="p-3 border-bottom">
         <div className="fw-bold">Material App</div>
@@ -21,18 +21,16 @@ export default function Sidebar() {
           href="/materials"
           className={`nav-link rounded ${isActive("/materials") ? "bg-primary text-white" : "text-body"}`}
         >
-          자재(Materials)
+          자재
         </Link>
         <Link
           href="/zones"
           className={`nav-link rounded ${isActive("/zones") ? "bg-primary text-white" : "text-body"}`}
         >
-          창고(Zones)
+          창고
         </Link>
         <div className="mt-2 pt-2 border-top" />
-        <Link href="/materials/export" className="nav-link text-body rounded">
-          Markdown 다운로드
-        </Link>
+        {/* Export 링크 제거 */}
       </nav>
       <div className="mt-auto p-3 small text-secondary border-top">© {new Date().getFullYear()}</div>
     </aside>
