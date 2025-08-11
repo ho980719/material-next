@@ -3,11 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import ClientBootstrap from "@/components/ClientBootstrap";
-import Sidebar from "@/components/Sidebar";
-import ToastArea from "@/components/ToastArea";
-import MobileNavbar from "@/components/MobileNavbar";
-import GlobalLoading from "@/components/GlobalLoading";
+import ClientBootstrap from "@/components/common/ClientBootstrap";
+import Sidebar from "@/components/common/Sidebar";
+import ToastArea from "@/components/common/ToastArea";
+import MobileNavbar from "@/components/common/MobileNavbar";
+import GlobalLoading from "@/components/common/GlobalLoading";
 import { Suspense } from "react";
 
 const geistSans = Geist({

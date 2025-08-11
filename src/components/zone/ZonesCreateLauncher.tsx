@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { pushToast } from "@/components/ToastArea";
+import { pushToast } from "@/components/common/ToastArea";
 
 export default function ZonesCreateLauncher() {
   const router = useRouter();

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { pushToast } from "@/components/ToastArea";
+import { pushToast } from "@/components/common/ToastArea";
 
 type Zone = { id: number; name: string };
 type Material = { id: number; name: string; quantity: number; zoneId: number };

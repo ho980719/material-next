@@ -1,23 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import MaterialList from "@/components/MaterialList";
-import Pagination from "@/components/Pagination";
-import MaterialsCreateLauncher from "@/components/MaterialsCreateLauncher";
+import MaterialList from "@/components/material/MaterialList";
+import Pagination from "@/components/common/Pagination";
+import MaterialsCreateLauncher from "@/components/material/MaterialsCreateLauncher";
+import { Prisma } from "@prisma/client";
 
-export default async function MaterialsPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {
+export default async function MaterialsPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string; zoneId?: string }> }) {
   const pageSize = 10;
   const sp = await searchParams;
   const page = Math.max(1, Number(sp?.page ?? 1));
   const q = sp?.q?.trim() ?? "";
+  const zoneId = sp?.zoneId?.trim() ?? "";
   const skip = (page - 1) * pageSize;
 
-  const where = q
-    ? {
-        OR: [
-          { name: { contains: q } },
-          { zone: { name: { contains: q } } },
-        ],
-      }
-    : undefined;
+    const where: Prisma.MaterialWhereInput = {};
+
+    if (zoneId) {
+        where.zoneId = Number(zoneId);
+    }
+
+    if (q) {
+        where.OR = [
+            { name: { contains: q, mode: 'insensitive' } },
+            { zone: { name: { contains: q, mode: 'insensitive' } } },
+        ];
+    }
 
   const [total, materials, zones] = await Promise.all([
     prisma.material.count({ where }),

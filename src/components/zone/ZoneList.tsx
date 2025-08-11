@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import ConfirmModal from "@/components/ConfirmModal";
-import { pushToast } from "@/components/ToastArea";
-import ZoneEditLauncher from "@/components/ZoneEditLauncher";
+import ConfirmModal from "@/components/common/ConfirmModal";
+import { pushToast } from "@/components/common/ToastArea";
+import ZoneEditLauncher from "@/components/zone/ZoneEditLauncher";
 
 type Zone = {
   id: number;
@@ -63,13 +63,12 @@ export default function ZoneList({ zones, page, pageSize, total }: { zones: Zone
             >
               <input
                 ref={inputRef}
-                className="form-control"
-                style={{ width: 240 }}
-                placeholder="창고 이름 검색"
+                className="form-control form-control-sm"
+                placeholder="검색(창고)"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
               />
-              <button type="submit" className="btn btn-outline-primary">
+              <button type="submit" className="btn btn-outline-primary btn-sm flex-shrink-0">
                 <i className="bi bi-search" /> 검색
               </button>
             </form>

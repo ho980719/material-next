@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand bg-body-tertiary mb-4">
       <div className="container">
-        <Link className="navbar-brand" href="/">
+        <Link className="navbar-brand" href="/public">
           Material App
         </Link>
         <div className="navbar-nav">

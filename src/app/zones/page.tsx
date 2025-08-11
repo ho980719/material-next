@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import ZoneList from "@/components/ZoneList";
-import Pagination from "@/components/Pagination";
-import ZonesCreateLauncher from "@/components/ZonesCreateLauncher";
+import ZoneList from "@/components/zone/ZoneList";
+import Pagination from "@/components/common/Pagination";
+import ZonesCreateLauncher from "@/components/zone/ZonesCreateLauncher";
 
 export default async function ZonesPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {
   const pageSize = 10;

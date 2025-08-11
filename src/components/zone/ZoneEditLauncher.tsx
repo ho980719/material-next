@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { pushToast } from "@/components/ToastArea";
+import { pushToast } from "@/components/common/ToastArea";
 
 type Zone = { id: number; name: string; memo: string | null };
 

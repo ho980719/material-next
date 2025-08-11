@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  material:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: material
+      MYSQL_USER: material
+      MYSQL_PASSWORD: material#1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - D:/docker/db/material:/var/lib/mysql
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
